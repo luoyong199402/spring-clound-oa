@@ -1,0 +1,5 @@
+# Project exclude paths
+/eurake/target/
+/user/user-server/target/
+/user/user-server-api/target/
+/user/user-server-edge/target/

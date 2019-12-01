@@ -1,0 +1,18 @@
+server:
+  port: 6661
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka
+  instance:
+    instance-id: oa-user-server-edge
+    prefer-ip-address: true
+
+info:
+  app.name: oa-user-server-edge
+  company.name: com.ly
+
+spring:
+  application:
+    name: oa-user-server-edge
