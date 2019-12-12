@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.UserDataHandler;
 
+/**
+ * @author ly
+ */
 @RestController
 @RequestMapping("/user")
 public class RemoteUserServiceImpl {
