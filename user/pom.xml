@@ -17,5 +17,4 @@
         <module>user-server-api</module>
         <module>user-server</module>
     </modules>
-
 </project>

@@ -43,6 +43,11 @@ public class UserDO {
     )
     private String loginName;
 
+    @Column(
+            columnDefinition = "varchar(32) default 1 comment '登录名'"
+    )
+    private Boolean isEnable;
+
     @Convert(converter = SexEnum.SexEnumConverter.class)
     @Column(
             nullable = false,
