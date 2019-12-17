@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author ly
@@ -24,7 +23,7 @@ public class UserDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(
             nullable = false,
@@ -63,19 +62,26 @@ public class UserDO {
     private String email;
 
     /**
-     * CascadeType.MERGE     会处理关系关系表。 但是不会操作级联的那个张表。 如果级联的那张表没有
+     * CascadeType.MERGE     会处理关系关系表。 但是不会操作级联的那个张表。 如果级联的那张表没有数据。 则会出现org.springframework.dao.InvalidDataAccessApiUsageException:
      * CascadeType.REMOVE    会将级联的那张表一并删除掉（中间表和级联表）。
-     * CascadeType.PERSIST   会处理级联保存（中间表和级联表）, 级联删除（只删除中间表），
+     * CascadeType.PERSIST   会处理级联保存（中间表和级联表）, 级联删除（只删除中间表， 级联的那张表不会删除），
      * CascadeType.DETACH    级联脱管/游离操作。  相当于将中间表的关系指点置空。
      * CascadeType.ALL       所有操作
      * CascadeType.REFRESH   级联刷新操作。 会先更新级联表数据。
      */
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "user_dept",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "dept_id", referencedColumnName = "id")}
     )
     private List<DeptDO> deptList;
+
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(name = "user_post",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id", referencedColumnName = "id")}
+    )
+    private List<PostDO> postList;
 
     @CreationTimestamp
     @Column(

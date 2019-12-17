@@ -4,14 +4,13 @@ import com.ly.oa.user.server.constant.enums.SexEnum;
 import com.ly.oa.user.server.entity.dos.DeptDO;
 import com.ly.oa.user.server.entity.dos.UserDO;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +18,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Slf4j
-/*@Transactional
-@Rollback*/
-public class UserDaoTest {
+@Transactional
+@Rollback
+class UserDaoTest {
 	@Autowired
 	UserDao userDao;
 
@@ -41,14 +39,14 @@ public class UserDaoTest {
 		user = userDao.save(user);
 
 		log.info("user = {}", user);
-		Assert.assertNotNull(user.getId());
+		Assert.notNull(user.getId(), "保存失败！");
 	}
 
 	@Test
 	public void find() {
 		save();
 		Optional<UserDO> userEntity = userDao.getByLoginName("ly");
-		Assert.assertNotNull(userEntity.get().getId());
+		Assert.notNull(userEntity.get().getId(), "查询失败！");
 	}
 
 	@Test
@@ -57,7 +55,7 @@ public class UserDaoTest {
 		Optional<UserDO> user = userDao.getByLoginName("ly");
 		user.get().setEmail("123@qq.com");
 		UserDO saveUser = userDao.save(user.get());
-		Assert.assertEquals(saveUser.getEmail(), "123@qq.com");
+		Assert.isTrue(StringUtils.equals(saveUser.getEmail(), "123@qq.com"), "更新失败！");
 	}
 
 	@Test
@@ -68,17 +66,20 @@ public class UserDaoTest {
 		log.info("delete user = {}", userDO.get());
 
 		Optional<UserDO> queryUser = userDao.getByLoginName(userEntity.getLoginName());
-		Assert.assertEquals(queryUser, Optional.empty());
+		Assert.isTrue(queryUser.equals(Optional.empty()), "删除失败！");
 	}
 
 	@Test
 	public void cascadeSave() {
 		UserDO user = getUser();
-		List<DeptDO> detpList = getDetpList();
-		user.setDeptList(detpList);
-		UserDO saveUser = userDao.save(user);
+		List<DeptDO> deptList = getDetpList();
+		user.setDeptList(deptList);
 
-		Assert.assertEquals(saveUser.getDeptList().size(), detpList.size());
+		deptDao.saveAll(deptList);
+		UserDO saveUser = userDao.save(user);
+		log.info("{}", saveUser);
+
+		Assert.notNull(saveUser.getId(), "级联保存失败！");
 	}
 
 	@Test
@@ -94,7 +95,8 @@ public class UserDaoTest {
 
 		ly2.get().setDeptList(newName);
 
-		userDao.save(ly2.get());
+		UserDO userDO = userDao.save(ly2.get());
+		Assert.notNull(userDO, "级联更新失败！");
 	}
 
 	@Test

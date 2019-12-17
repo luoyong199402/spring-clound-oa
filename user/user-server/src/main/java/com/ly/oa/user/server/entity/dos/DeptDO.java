@@ -23,7 +23,7 @@ import java.util.Set;
 public class DeptDO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	@Column(
 			nullable = false,
@@ -50,7 +50,6 @@ public class DeptDO {
 	private String code;
 
 	@Column(
-			nullable = false,
 			columnDefinition = "varchar(255) comment '父部门id'"
 	)
 	private String parentId;
