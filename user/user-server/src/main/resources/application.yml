@@ -13,6 +13,8 @@ info:
   app.name: oa-user-server
   company.name: com.ly
 
+
+
 spring:
   application:
     name: oa-user-server
@@ -37,3 +39,15 @@ spring:
     url: jdbc:mysql://180.76.248.216:3306/oa-user?serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
     #mysql8.0以后的加密方式为caching_sha2_password，所以必须用com.mysql.cj.jdbc.Driver,前提是pom里引入的mysql-connector-java必须为8.0.12的，8.0.13不行，会报错
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    database: 0
+    host: 180.76.248.216
+    port: 6379
+
+cache:
+  default:
+    expire-time: 200
+  user:
+    expire-time: 180
+    name: test

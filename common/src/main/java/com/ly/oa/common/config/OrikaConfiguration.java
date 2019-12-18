@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OrikaConfiguration {
-
 	@Bean
 	public OrikaBeanMapper beanMapper() {
 		return new OrikaBeanMapper();

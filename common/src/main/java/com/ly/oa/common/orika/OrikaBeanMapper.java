@@ -5,6 +5,7 @@ import ma.glasnost.orika.Mapper;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.ConfigurableMapper;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ma.glasnost.orika.metadata.ClassMapBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -34,7 +35,6 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
 	protected void configureFactoryBuilder(DefaultMapperFactory.Builder factoryBuilder) {
 	}
 
-
 	private void addMapper(Mapper<?, ?> mapper) {
 		this.factory.registerMapper(mapper);
 	}
@@ -44,6 +44,7 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
 	}
 
 	private void addAllSpringBeans(ApplicationContext applicationContext) {
+		// 注册mappers
 		Map<String, Mapper> mappers = applicationContext.getBeansOfType(Mapper.class);
 		Iterator var3 = mappers.values().iterator();
 
@@ -52,6 +53,7 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
 			this.addMapper(mapper);
 		}
 
+		// 注册converters
 		Map<String, Converter> converters = applicationContext.getBeansOfType(Converter.class);
 		Iterator var7 = converters.values().iterator();
 
@@ -59,7 +61,6 @@ public class OrikaBeanMapper extends ConfigurableMapper implements ApplicationCo
 			Converter converter = (Converter)var7.next();
 			this.addConverter(converter);
 		}
-
 	}
 
 	@Override
