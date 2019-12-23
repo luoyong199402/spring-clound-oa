@@ -13,8 +13,6 @@ info:
   app.name: oa-user-server
   company.name: com.ly
 
-
-
 spring:
   application:
     name: oa-user-server

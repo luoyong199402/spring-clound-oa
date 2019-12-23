@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 	@Cacheable
 	public UserDTO getUserById(Long userId) {
 		Optional<UserDO> userDoOptional = userDao.findById(userId);
-		log.info("{}", userId);
 		return orikaBeanMapper.map(userDoOptional.get(), UserDTO.class);
 	}
 

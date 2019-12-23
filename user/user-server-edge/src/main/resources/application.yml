@@ -16,3 +16,19 @@ info:
 spring:
   application:
     name: oa-user-server-edge
+
+feign:
+  hystrix:
+    enabled: true
+
+management:
+  server:
+    port: 6661
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: "/actuator"
+  endpoint:
+    health:
+      show-details: always
