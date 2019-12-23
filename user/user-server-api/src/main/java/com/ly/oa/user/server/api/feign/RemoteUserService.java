@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * @author lyong
  */
-@FeignClient(value = "oa-user-server", fallbackFactory = RemoteUserServiceFallbackFactory.class)
+@FeignClient(name = "oa-user-server", fallbackFactory = RemoteUserServiceFallbackFactory.class)
 public interface RemoteUserService {
 
     @RequestMapping(
