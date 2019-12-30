@@ -11,14 +11,13 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Slf4j
-//@Component
 public class RemoteUserServiceFallbackImpl implements RemoteUserService {
 
 	private Throwable cause;
 
 	@Override
 	public UserDTO getUserById(Long id) {
-		log.info("获取用户失败！ userId = {}", id);
+		log.error("获取用户失败！ userId = {}", id);
 		return null;
 	}
 

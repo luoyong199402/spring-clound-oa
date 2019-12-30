@@ -2,7 +2,6 @@ package com.ly.oa.user.server.api.feign;
 
 
 import com.ly.oa.user.server.api.dto.UserDTO;
-import com.ly.oa.user.server.api.feign.factory.RemoteUserServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * @author lyong
  */
-@FeignClient(name = "oa-user-server", fallbackFactory = RemoteUserServiceFallbackFactory.class)
+@FeignClient(name = "oa-user-server")
 public interface RemoteUserService {
 
     @RequestMapping(
