@@ -18,6 +18,7 @@ package com.ly.oa.common.util;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -25,10 +26,8 @@ import java.io.Serializable;
 /**
  * 响应信息主体
  *
- * @param <T>
- * @author lengleng
+ * @author ly
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -39,5 +38,12 @@ public class APIResponse implements Serializable {
 	private int code;
 	private String message;
 	private Object data;
+
+	public static APIResponse ok(Object data) {
+		return APIResponse.builder()
+				.code(HttpStatus.OK.value())
+				.message("success")
+				.data(data).build();
+	}
 }
 

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/**
+ * @author ly
+ */
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -27,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Object getUserById(@PathVariable Long id) {
+    public UserDTO getUserById(@PathVariable Long id) {
         UserDTO userDTO = remoteUserService.getUserById(id);
-        return APIResponse.builder().code(HttpStatus.OK.value()).message("sucuess").data(userDTO).build();
+        return userDTO;
     }
 }
