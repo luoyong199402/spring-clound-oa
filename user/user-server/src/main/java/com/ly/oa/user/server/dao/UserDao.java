@@ -2,6 +2,7 @@ package com.ly.oa.user.server.dao;
 
 import com.ly.oa.user.server.entity.dos.UserDO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;

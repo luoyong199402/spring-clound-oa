@@ -1,7 +1,9 @@
 package com.ly.oa.user.server.service;
 
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.orika.mapper.UserDtoToUserDoMapper;
+import org.springframework.data.domain.Page;
 
 /**
  * @author ly
@@ -20,6 +22,13 @@ public interface UserService {
 	 * @return 用户信息
 	 */
 	UserDTO getUserByLoginName(String loginName);
+
+	/**
+	 * 通用用户查询
+	 * @param userQuery
+	 * @return
+	 */
+	Page<UserDTO> queryUser(UserQuery userQuery);
 
 	/**
 	 * 保存用户信息

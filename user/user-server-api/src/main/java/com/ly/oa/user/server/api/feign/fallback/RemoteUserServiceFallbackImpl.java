@@ -26,4 +26,29 @@ public class RemoteUserServiceFallbackImpl implements RemoteUserService {
 		log.info("保存用户失败！ userDTO = {}", userDTO);
 		return null;
 	}
+
+	@Override
+	public UserDTO getUserByLoginName(String loginName) {
+		return null;
+	}
+
+	@Override
+	public UserDTO updateUser(Long id, UserDTO userDTO) {
+		return null;
+	}
+
+	@Override
+	public UserDTO deleteUser(Long id) {
+		return null;
+	}
+
+	@Override
+	public UserDTO forbiddenUser(Long id) {
+		return null;
+	}
+
+	@Override
+	public UserDTO enableUser(Long id) {
+		return null;
+	}
 }

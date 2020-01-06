@@ -2,6 +2,7 @@ package com.ly.oa.user.server.service.impl;
 
 import com.ly.oa.common.orika.OrikaBeanMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.dao.UserDao;
 import com.ly.oa.user.server.entity.dos.UserDO;
 import com.ly.oa.user.server.service.UserService;
@@ -11,9 +12,14 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,6 +50,29 @@ public class UserServiceImpl implements UserService {
 	public UserDTO getUserByLoginName(String loginName) {
 		Optional<UserDO> userDOOptional = userDao.getByLoginName(loginName);
 		return orikaBeanMapper.map(userDOOptional.get(), UserDTO.class);
+	}
+
+	@Override
+	public Page<UserDTO> queryUser(UserQuery userQuery) {
+		return null;
+	}
+
+	public Page<UserDTO> queryUser(UserDO userDO) {
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withMatcher("id", ExampleMatcher.GenericPropertyMatchers.exact())
+				.withMatcher("firstName", ExampleMatcher.GenericPropertyMatchers.contains())
+				.withMatcher("lastName", ExampleMatcher.GenericPropertyMatchers.contains())
+				.withMatcher("loginName", ExampleMatcher.GenericPropertyMatchers.contains())
+				.withMatcher("isEnable", ExampleMatcher.GenericPropertyMatchers.exact())
+				.withMatcher("sex", ExampleMatcher.GenericPropertyMatchers.exact())
+				.withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+				.withIgnoreNullValues();
+
+		Example<UserDO> example = Example.of(userDO, exampleMatcher);
+		List<UserDO> userDoList = userDao.findAll(example);
+		List<UserDTO> userDTOS = orikaBeanMapper.mapAsList(userDoList, UserDTO.class);
+		Page page = new PageImpl(userDTOS);
+		return page;
 	}
 
 	@Override
