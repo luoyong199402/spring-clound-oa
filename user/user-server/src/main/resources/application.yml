@@ -25,7 +25,7 @@ spring:
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      naming:
+      naming:`
         #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         #指定jpa的自动表生成策略，驼峰自动映射为下划线格式
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl

@@ -19,6 +19,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.SingularAttribute;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +61,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Page<UserDTO> queryUser(UserQuery userQuery) {
+		SingularAttribute<UserDO, String> loginName;
+		EntityManager em = null;
+		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+		CriteriaQuery<UserDO> criteriaQuery = criteriaBuilder.createQuery(UserDO.class);
+
+		Root<UserDO> employee = criteriaQuery.from(UserDO.class);
+		Predicate condition = null;
+
+		criteriaQuery.where(condition);
+
+		TypedQuery<UserDO> typedQuery = em.createQuery(criteriaQuery);
+
+		List<UserDO> result = typedQuery.getResultList();
+
 		return null;
 	}
 
