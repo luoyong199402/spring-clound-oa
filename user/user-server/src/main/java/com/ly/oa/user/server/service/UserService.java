@@ -4,6 +4,7 @@ import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.orika.mapper.UserDtoToUserDoMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author ly
@@ -28,7 +29,7 @@ public interface UserService {
 	 * @param userQuery
 	 * @return
 	 */
-	Page<UserDTO> queryUser(UserQuery userQuery);
+	Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable);
 
 	/**
 	 * 保存用户信息

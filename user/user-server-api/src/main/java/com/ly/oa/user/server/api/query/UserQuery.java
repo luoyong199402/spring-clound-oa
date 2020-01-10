@@ -45,12 +45,13 @@ public class UserQuery {
 	private String email;
 
 	/**
-	 * 创建时间
+	 * 创建时间(开始时间)
 	 */
-	private Date createTime;
+	private Date createTimeStartTime;
 
 	/**
-	 * 修改时间
+	 * 创建时间结束时间
 	 */
-	private Date modifyTime;
+	private Date createTimeEndTime;
+
 }

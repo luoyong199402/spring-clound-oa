@@ -7,25 +7,23 @@ import com.ly.oa.user.server.dao.UserDao;
 import com.ly.oa.user.server.entity.dos.UserDO;
 import com.ly.oa.user.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.SingularAttribute;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,22 +58,52 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<UserDTO> queryUser(UserQuery userQuery) {
-		SingularAttribute<UserDO, String> loginName;
-		EntityManager em = null;
-		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-		CriteriaQuery<UserDO> criteriaQuery = criteriaBuilder.createQuery(UserDO.class);
+	public Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable) {
+		Specification<UserDO> specification = (Root<UserDO> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> {
+			List<Predicate> predicateList = new ArrayList<>();
+			if (userQuery.getId() != null && userQuery.getId() != 0) {
+				predicateList.add(cb.equal(root.<Long>get("id"), userQuery.getId()));
+			}
 
-		Root<UserDO> employee = criteriaQuery.from(UserDO.class);
-		Predicate condition = null;
+			if (StringUtils.isNotEmpty(userQuery.getFirstName())) {
+				predicateList.add(cb.like(root.get("firstName"),  String.format("%%%s%%", userQuery.getFirstName())));
+			}
 
-		criteriaQuery.where(condition);
+			if (StringUtils.isNotEmpty(userQuery.getLastName())) {
+				predicateList.add(cb.like(root.get("lastName"),  String.format("%%%s%%", userQuery.getLastName())));
+			}
 
-		TypedQuery<UserDO> typedQuery = em.createQuery(criteriaQuery);
+			if (StringUtils.isNotEmpty(userQuery.getLoginName())) {
+				predicateList.add(cb.like(root.get("loginName"),  String.format("%%%s%%", userQuery.getLoginName())));
+			}
 
-		List<UserDO> result = typedQuery.getResultList();
+			if (userQuery.getIsEnable() != null) {
+				predicateList.add(cb.equal(root.<Boolean>get("isEnable"), userQuery.getId()));
+			}
 
-		return null;
+			if (StringUtils.isNotEmpty(userQuery.getSex())) {
+				predicateList.add(cb.equal(root.<String>get("sex"), userQuery.getSex()));
+			}
+
+			if (StringUtils.isNotEmpty(userQuery.getEmail())) {
+				predicateList.add(cb.like(root.get("email"),  String.format("%%%s%%", userQuery.getEmail())));
+			}
+
+			if (userQuery.getCreateTimeStartTime() != null) {
+				predicateList.add(cb.greaterThanOrEqualTo(root.<Date>get("createTime"), userQuery.getCreateTimeStartTime()));
+			}
+
+			if (userQuery.getCreateTimeEndTime() != null) {
+				predicateList.add(cb.greaterThanOrEqualTo(root.<Date>get("createTime"), userQuery.getCreateTimeEndTime()));
+			}
+
+			return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
+		};
+		Page<UserDO> userDOS = userDao.findAll(specification, pageable);
+
+		List<UserDTO> userDTOS = orikaBeanMapper.mapAsList(userDOS.getContent(), UserDTO.class);
+		Page<UserDTO> retPage = new PageImpl<UserDTO>(userDTOS, pageable, userDOS.getTotalElements());
+		return retPage;
 	}
 
 	public Page<UserDTO> queryUser(UserDO userDO) {

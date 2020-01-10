@@ -5,6 +5,7 @@ import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.query.UserQuery;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public interface RemoteUserService {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    Page<UserDTO> queryUser(UserQuery userQuery);
+    Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable);
 
     @RequestMapping(
             value = "/user",
@@ -39,7 +40,8 @@ public interface RemoteUserService {
     @RequestMapping(
             value = "/user",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"loginName"}
     )
     UserDTO getUserByLoginName(String loginName);
 
@@ -58,16 +60,18 @@ public interface RemoteUserService {
     UserDTO deleteUser(@PathVariable Long id);
 
     @RequestMapping(
-            value = "/user/forbiddance/{id}",
+            value = "/user/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"action=enable"}
     )
     UserDTO forbiddenUser(@PathVariable Long id);
 
     @RequestMapping(
-            value = "/user/{id}/enabler",
+            value = "/user/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"action=forbidden"}
     )
     UserDTO enableUser(@PathVariable Long id);
 

@@ -6,6 +6,9 @@ import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,8 +28,13 @@ public class RemoteUserServiceImpl implements RemoteUserService {
     }
 
     @Override
-    public Page<UserDTO> queryUser(UserQuery userQuery) {
-        return null;
+    @GetMapping("/page")
+    public Page<UserDTO> queryUser(UserQuery userQuery,
+                                   @PageableDefault(
+                                           value = 20,
+                                           sort = { "createTime" },
+                                           direction = Sort.Direction.DESC) Pageable pageable) {
+        return userService.queryUser(userQuery, pageable);
     }
 
     @Override

@@ -1,18 +1,29 @@
 package com.ly.oa.user.server.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.constant.enums.SexEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,6 +74,26 @@ class lTest {
 		log.info(content);
 	}
 
+	@Test
+	void queryUser() throws Exception {
+		String url = "/user/page";
+		MvcResult mvcResult = mockMvc
+				.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON)
+						.param("firstName", "1")
+						.param("page", "1")
+						.param("size", "2")
+						.param("sort", "id,desc")
+						.param("sort", "loginName")
+				)
+				.andExpect(status().isOk())
+				.andReturn();
+
+		MockHttpServletResponse response = mvcResult.getResponse();
+
+		// 返回结果
+		String content = response.getContentAsString();
+		log.info(content);
+	}
 
 	@Test
 	void getUserByLoginName() throws Exception {
