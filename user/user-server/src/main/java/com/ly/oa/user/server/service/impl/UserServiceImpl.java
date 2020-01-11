@@ -2,6 +2,7 @@ package com.ly.oa.user.server.service.impl;
 
 import com.ly.oa.common.orika.OrikaBeanMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.exception.UserNotFoundException;
 import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.dao.UserDao;
 import com.ly.oa.user.server.entity.dos.UserDO;
@@ -48,12 +49,14 @@ public class UserServiceImpl implements UserService {
 	@Cacheable
 	public UserDTO getUserById(Long userId) {
 		Optional<UserDO> userDoOptional = userDao.findById(userId);
+		userDoOptional.orElseThrow(() -> new UserNotFoundException(null, "用户没有找到！", userId));
 		return orikaBeanMapper.map(userDoOptional.get(), UserDTO.class);
 	}
 
 	@Override
 	public UserDTO getUserByLoginName(String loginName) {
 		Optional<UserDO> userDOOptional = userDao.getByLoginName(loginName);
+		userDOOptional.orElseThrow(() -> new UserNotFoundException(null, "用户没有找到！", null));
 		return orikaBeanMapper.map(userDOOptional.get(), UserDTO.class);
 	}
 
@@ -159,6 +162,7 @@ public class UserServiceImpl implements UserService {
 	@CachePut(key = "#result.id")
 	public UserDTO forbiddenUser(Long userId) {
 		Optional<UserDO> userDOOptional = userDao.findById(userId);
+		userDOOptional.orElseThrow(() -> new UserNotFoundException(null, "用户没有找到！", userId));
 		userDOOptional.get().setIsEnable(false);
 		UserDO updateUser = userDao.saveAndFlush(userDOOptional.get());
 		return orikaBeanMapper.map(updateUser, UserDTO.class);
@@ -168,6 +172,7 @@ public class UserServiceImpl implements UserService {
 	@CachePut(key = "#result.id")
 	public UserDTO enableUser(Long userId) {
 		Optional<UserDO> userDOOptional = userDao.findById(userId);
+		userDOOptional.orElseThrow(() -> new UserNotFoundException(null, "用户没有找到！", userId));
 		userDOOptional.get().setIsEnable(true);
 		UserDO updateUser = userDao.save(userDOOptional.get());
 		return orikaBeanMapper.map(updateUser, UserDTO.class);
