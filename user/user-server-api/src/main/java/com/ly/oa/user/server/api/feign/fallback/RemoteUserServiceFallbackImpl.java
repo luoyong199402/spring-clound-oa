@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * @author ly
  */
@@ -28,7 +30,7 @@ public class RemoteUserServiceFallbackImpl implements RemoteUserService {
 	}
 
 	@Override
-	public Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable) {
+	public Page<UserDTO> queryUser(Long id, String firstName, String lastName, String loginName, Boolean isEnable, String email, Date createTimeStartTime, Date createTimeEndTime, Integer page, Integer integer, String... sort) {
 		return null;
 	}
 

@@ -93,4 +93,19 @@ public class GlobalExceptionHandler {
 
 		return result;
 	}
+
+	/**
+	 * 内部微服务异常统一处理方法
+	 */
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public APIResponse processMicroServiceException(HttpServletResponse response,
+													Exception e) {
+		response.setContentType("application/json;charset=UTF-8");
+		APIResponse result = new APIResponse();
+		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		result.setMessage(e.getMessage());
+		return result;
+	}
 }

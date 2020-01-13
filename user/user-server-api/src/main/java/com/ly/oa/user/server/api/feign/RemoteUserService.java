@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * @author ly
  */
@@ -25,11 +27,23 @@ public interface RemoteUserService {
 
 
     @RequestMapping(
-            value = "/user",
+            value = "/user/page",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    Page<UserDTO> queryUser(@RequestParam UserQuery userQuery, @RequestParam Pageable pageable);
+    Page<UserDTO> queryUser(
+            @RequestParam("id") Long id,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("loginName") String loginName,
+            @RequestParam("isEnable") Boolean isEnable,
+            @RequestParam("email") String email,
+            @RequestParam("createTimeStartTime") Date createTimeStartTime,
+            @RequestParam("createTimeEndTime") Date createTimeEndTime,
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer integer,
+            @RequestParam("sort") String... sort
+    );
 
     @RequestMapping(
             value = "/user",

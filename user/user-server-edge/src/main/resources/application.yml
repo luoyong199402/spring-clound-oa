@@ -20,6 +20,8 @@ spring:
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    enabled:
 
 management:
   server:
