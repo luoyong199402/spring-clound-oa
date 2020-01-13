@@ -20,11 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UserController {
 
-    private final RemoteUserService remoteUserService;
-
-    public UserController(RemoteUserService remoteUserService) {
-        this.remoteUserService = remoteUserService;
-    }
+    @Autowired
+    private RemoteUserService remoteUserService;
 
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {

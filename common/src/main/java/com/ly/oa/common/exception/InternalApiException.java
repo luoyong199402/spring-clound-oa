@@ -16,4 +16,10 @@ import lombok.NoArgsConstructor;
 public class InternalApiException extends RuntimeException {
 	private int code;
 	private String message;
+
+	public InternalApiException(Throwable throwable, int code, String message) {
+		super(throwable);
+		this.code = code;
+		this.message = message;
+	}
 }

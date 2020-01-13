@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients("com.ly.oa.user.server.api.feign")
-@ComponentScan(basePackages = {"com.ly.oa.user.server.edge", "com.ly.oa.user.server.api.feign", "com.ly.oa.user.server.api.feign.config"})
+@EnableFeignClients("com.ly.oa.user.server.api")
+@ComponentScan(basePackages = {"com.ly.oa.user.server.edge", "com.ly.oa.user.server.api"})
 public class OAUserServerEdge {
     public static void main(String[] args) {
         SpringApplication.run(OAUserServerEdge.class, args);

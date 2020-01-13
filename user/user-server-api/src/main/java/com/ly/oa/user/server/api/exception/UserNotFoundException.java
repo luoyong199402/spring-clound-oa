@@ -1,6 +1,7 @@
 package com.ly.oa.user.server.api.exception;
 
 import com.ly.oa.common.exception.ApiException;
+import com.ly.oa.common.exception.InternalApiException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -11,11 +12,11 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @Setter
-public class UserNotFoundException extends ApiException {
+public class UserNotFoundException extends InternalApiException {
 	private Long userId;
 
 	public UserNotFoundException(Throwable cause, String message, Long userId) {
-		super(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.value(), message);
+		super(cause, HttpStatus.BAD_REQUEST.value(), message);
 		setUserId(userId);
 	}
 }

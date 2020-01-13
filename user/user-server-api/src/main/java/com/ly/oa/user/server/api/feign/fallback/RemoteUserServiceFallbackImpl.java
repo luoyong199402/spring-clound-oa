@@ -1,5 +1,6 @@
 package com.ly.oa.user.server.api.feign.fallback;
 
+import com.ly.oa.common.exception.InternalApiException;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.RemoteUserService;
 import com.ly.oa.user.server.api.query.UserQuery;
@@ -14,14 +15,16 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Slf4j
+@Component
 public class RemoteUserServiceFallbackImpl implements RemoteUserService {
 
 	private Throwable cause;
 
 	@Override
-	public UserDTO getUserById(Long id) {
+	public UserDTO getUserById(Long id) throws InternalApiException {
 		log.error("获取用户失败！ userId = {}", id);
-		return null;
+		cause.getMessage();
+		throw (InternalApiException)cause;
 	}
 
 	@Override

@@ -83,6 +83,14 @@ public class GlobalExceptionHandler {
 		APIResponse result = new APIResponse();
 		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		result.setMessage(e.getMessage());
+
+		if (e.getCause() instanceof InternalApiException) {
+			InternalApiException internalApiException = (InternalApiException) e.getCause();
+			result.setCode(internalApiException.getCode());
+			result.setMessage(internalApiException.getMessage());
+			return result;
+		}
+
 		return result;
 	}
 }

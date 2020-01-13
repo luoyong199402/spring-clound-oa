@@ -2,6 +2,7 @@ package com.ly.oa.user.server.api.feign;
 
 
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.feign.factory.RemoteUserServiceFallbackFactory;
 import com.ly.oa.user.server.api.query.UserQuery;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author ly
  */
-@FeignClient(name = "oa-user-server")
+@FeignClient(name = "oa-user-server", fallbackFactory = RemoteUserServiceFallbackFactory.class)
 public interface RemoteUserService {
 
     @RequestMapping(
@@ -28,7 +29,7 @@ public interface RemoteUserService {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable);
+    Page<UserDTO> queryUser(@RequestParam UserQuery userQuery, @RequestParam Pageable pageable);
 
     @RequestMapping(
             value = "/user",
