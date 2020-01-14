@@ -1,12 +1,10 @@
 package com.ly.oa.user.server.api.feign;
 
 
+import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.factory.RemoteUserServiceFallbackFactory;
-import com.ly.oa.user.server.api.query.UserQuery;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +40,7 @@ public interface RemoteUserService {
             @RequestParam("createTimeEndTime") Date createTimeEndTime,
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer integer,
-            @RequestParam("sort") String... sort
+            @RequestParam("sort") String[] sort
     );
 
     @RequestMapping(
@@ -89,6 +87,4 @@ public interface RemoteUserService {
             params = {"action=forbidden"}
     )
     UserDTO enableUser(@PathVariable Long id);
-
-
 }

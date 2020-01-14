@@ -1,19 +1,18 @@
 package com.ly.oa.user.server.edge.controller;
 
 
-import com.ly.oa.common.util.APIResponse;
+import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.RemoteUserService;
 import com.ly.oa.user.server.api.query.UserQuery;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,6 +38,16 @@ public class UserController  {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable) {
+        List<String> sortList = pageable.getSort().stream()
+                .map(order -> {
+                    return order.getProperty() + "," + order.getDirection().toString();
+                })
+                .collect(Collectors.toList());
+
+        // 转换为字符串数组
+        String[] sorts = new String[sortList.size()];
+        sortList.toArray(sorts);
+
         Page<UserDTO> userDTOS = remoteUserService.queryUser(
                 userQuery.getId(),
                 userQuery.getFirstName(),
@@ -50,7 +59,7 @@ public class UserController  {
                 userQuery.getCreateTimeEndTime(),
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                null);
+                sorts);
 
         log.info("{}", userDTOS);
         return userDTOS;

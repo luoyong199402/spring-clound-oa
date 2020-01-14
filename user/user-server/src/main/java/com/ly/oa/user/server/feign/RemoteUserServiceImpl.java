@@ -1,11 +1,11 @@
 package com.ly.oa.user.server.feign;
 
+import com.ly.oa.common.orika.OrikaBeanMapper;
+import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
-import com.ly.oa.user.server.api.feign.RemoteUserService;
 import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +20,7 @@ public class RemoteUserServiceImpl {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id) {

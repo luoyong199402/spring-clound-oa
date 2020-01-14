@@ -1,13 +1,11 @@
 package com.ly.oa.user.server.api.feign.fallback;
 
 import com.ly.oa.common.exception.InternalApiException;
+import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.RemoteUserService;
-import com.ly.oa.user.server.api.query.UserQuery;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

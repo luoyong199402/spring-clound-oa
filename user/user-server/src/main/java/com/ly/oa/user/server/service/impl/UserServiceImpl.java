@@ -1,5 +1,6 @@
 package com.ly.oa.user.server.service.impl;
 
+import com.ly.oa.common.page.Page;
 import com.ly.oa.common.orika.OrikaBeanMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.exception.UserNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.ResolvableType;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -102,11 +104,11 @@ public class UserServiceImpl implements UserService {
 
 			return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
 		};
-		Page<UserDO> userDOS = userDao.findAll(specification, pageable);
 
-		List<UserDTO> userDTOS = orikaBeanMapper.mapAsList(userDOS.getContent(), UserDTO.class);
-		Page<UserDTO> retPage = new PageImpl<UserDTO>(userDTOS, pageable, userDOS.getTotalElements());
-		return retPage;
+		org.springframework.data.domain.Page<UserDO> userDOPage = userDao.findAll(specification, pageable);
+		List<UserDTO> userDTOList = orikaBeanMapper.mapAsList(userDOPage.getContent(), UserDTO.class);
+		Page<UserDTO> userDTOPage = new Page<>(userDTOList, userDOPage.getTotalElements(), userDOPage.getNumber(), userDOPage.getSize());
+		return userDTOPage;
 	}
 
 	public Page<UserDTO> queryUser(UserDO userDO) {
@@ -123,7 +125,7 @@ public class UserServiceImpl implements UserService {
 		Example<UserDO> example = Example.of(userDO, exampleMatcher);
 		List<UserDO> userDoList = userDao.findAll(example);
 		List<UserDTO> userDTOS = orikaBeanMapper.mapAsList(userDoList, UserDTO.class);
-		Page page = new PageImpl(userDTOS);
+		Page<UserDTO> page = new Page<>(userDTOS, userDoList.size(), 0, userDoList.size());
 		return page;
 	}
 

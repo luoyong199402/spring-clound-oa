@@ -1,9 +1,8 @@
 package com.ly.oa.user.server.service;
 
+import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.query.UserQuery;
-import com.ly.oa.user.server.orika.mapper.UserDtoToUserDoMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
