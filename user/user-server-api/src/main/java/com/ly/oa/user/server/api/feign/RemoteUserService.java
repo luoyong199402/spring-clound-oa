@@ -4,11 +4,14 @@ package com.ly.oa.user.server.api.feign;
 import com.ly.oa.common.page.Page;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.factory.RemoteUserServiceFallbackFactory;
+import com.ly.oa.user.server.api.query.UserQuery;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ly
@@ -27,7 +30,8 @@ public interface RemoteUserService {
     @RequestMapping(
             value = "/user/page",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
     )
     Page<UserDTO> queryUser(
             @RequestParam("id") Long id,
@@ -40,8 +44,16 @@ public interface RemoteUserService {
             @RequestParam("createTimeEndTime") Date createTimeEndTime,
             @RequestParam("page") Integer page,
             @RequestParam("size") Integer integer,
-            @RequestParam("sort") String[] sort
+            @RequestParam("sort") List<String> sort
     );
+
+    @RequestMapping(
+            value = "/user/page",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    Page<UserDTO> queryUser(@RequestBody UserQuery userQuery);
 
     @RequestMapping(
             value = "/user",

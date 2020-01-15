@@ -1,8 +1,10 @@
 package com.ly.oa.user.server.api.query;
 
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ly
@@ -54,4 +56,18 @@ public class UserQuery {
 	 */
 	private Date createTimeEndTime;
 
+	/**
+	 * 分页的第几页
+	 */
+	private Integer page;
+
+	/**
+	 * 每页的大小
+	 */
+	private Integer size;
+
+	/**
+	 * 排序字段
+	 */
+	private List<String> sort;
 }

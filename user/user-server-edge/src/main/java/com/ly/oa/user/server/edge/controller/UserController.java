@@ -44,10 +44,6 @@ public class UserController  {
                 })
                 .collect(Collectors.toList());
 
-        // 转换为字符串数组
-        String[] sorts = new String[sortList.size()];
-        sortList.toArray(sorts);
-
         Page<UserDTO> userDTOS = remoteUserService.queryUser(
                 userQuery.getId(),
                 userQuery.getFirstName(),
@@ -59,11 +55,21 @@ public class UserController  {
                 userQuery.getCreateTimeEndTime(),
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                sorts);
+                sortList);
 
         log.info("{}", userDTOS);
         return userDTOS;
+    }
 
+    @RequestMapping(
+            value = "/page2",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    Page<UserDTO> queryUser2(UserQuery userQuery) {
+        Page<UserDTO> userDTOS = remoteUserService.queryUser(userQuery);
+        log.info("{}", userDTOS);
+        return userDTOS;
     }
 
     @PostMapping

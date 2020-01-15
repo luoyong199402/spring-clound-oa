@@ -2,12 +2,14 @@ package com.ly.oa.user.server.service.impl;
 
 import com.ly.oa.common.page.Page;
 import com.ly.oa.common.orika.OrikaBeanMapper;
+import com.ly.oa.common.page.PageConvertMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.exception.UserNotFoundException;
 import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.dao.UserDao;
 import com.ly.oa.user.server.entity.dos.UserDO;
 import com.ly.oa.user.server.service.UserService;
+import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private PageConvertMapper pageConvertMapper;
 
 	@Override
 	@Cacheable
@@ -106,9 +111,8 @@ public class UserServiceImpl implements UserService {
 		};
 
 		org.springframework.data.domain.Page<UserDO> userDOPage = userDao.findAll(specification, pageable);
-		List<UserDTO> userDTOList = orikaBeanMapper.mapAsList(userDOPage.getContent(), UserDTO.class);
-		Page<UserDTO> userDTOPage = new Page<>(userDTOList, userDOPage.getTotalElements(), userDOPage.getNumber(), userDOPage.getSize());
-		return userDTOPage;
+		Page<UserDTO> convertPage = pageConvertMapper.convert(userDOPage, UserDTO.class);
+		return convertPage;
 	}
 
 	public Page<UserDTO> queryUser(UserDO userDO) {
