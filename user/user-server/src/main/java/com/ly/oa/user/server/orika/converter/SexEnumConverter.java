@@ -1,6 +1,6 @@
 package com.ly.oa.user.server.orika.converter;
 
-import com.ly.oa.user.server.constant.enums.SexEnum;
+import com.ly.oa.user.server.api.enums.SexEnum;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.converter.BidirectionalConverter;
 import ma.glasnost.orika.metadata.Type;

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-
 	@Resource
 	MessageSource messageSource;
 
@@ -75,7 +74,7 @@ public class GlobalExceptionHandler {
 	 * 内部微服务异常统一处理方法
 	 */
 	@ExceptionHandler(HystrixRuntimeException.class)
-	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public APIResponse processMicroServiceException(HttpServletResponse response,
 													HystrixRuntimeException e) {
@@ -108,4 +107,20 @@ public class GlobalExceptionHandler {
 		result.setMessage(e.getMessage());
 		return result;
 	}
+
+	/**
+	 * 内部微服务异常统一处理方法
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public APIResponse processMethodArgumentNotValidException(HttpServletResponse response,
+				  MethodArgumentNotValidException e) {
+		response.setContentType("application/json;charset=UTF-8");
+		APIResponse result = new APIResponse();
+		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		result.setMessage("参数校验错误： " + e.getMessage());
+		return result;
+	}
+
 }

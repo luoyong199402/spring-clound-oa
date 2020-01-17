@@ -2,22 +2,15 @@ package com.ly.oa.user.server.service.impl;
 
 import com.ly.oa.common.orika.OrikaBeanMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
-import com.ly.oa.user.server.constant.enums.SexEnum;
-import com.ly.oa.user.server.entity.dos.UserDO;
-import com.ly.oa.user.server.orika.mapper.UserDtoToUserDoMapper;
+import com.ly.oa.user.server.api.enums.SexEnum;
 import com.ly.oa.user.server.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j

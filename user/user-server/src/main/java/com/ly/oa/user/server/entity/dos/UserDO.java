@@ -1,6 +1,6 @@
 package com.ly.oa.user.server.entity.dos;
 
-import com.ly.oa.user.server.constant.enums.SexEnum;
+import com.ly.oa.user.server.api.enums.SexEnum;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

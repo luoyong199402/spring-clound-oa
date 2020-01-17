@@ -1,6 +1,5 @@
-package com.ly.oa.user.server.edge.interceptor;
+package com.ly.oa.user.server.api.interceptor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
@@ -37,8 +36,6 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 				throw new RuntimeException(e);
 			}
 		}
-
-
 	}
 
 	private void buildQuery(JsonNode jsonNode, String path, Map<String, Collection<String>> queries) {

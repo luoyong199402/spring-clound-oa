@@ -1,4 +1,4 @@
-package com.ly.oa.user.server.constant.enums;
+package com.ly.oa.user.server.api.enums;
 
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;

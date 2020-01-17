@@ -6,7 +6,6 @@ import com.ly.oa.user.server.api.dto.UserDTO;
 import com.ly.oa.user.server.api.feign.factory.RemoteUserServiceFallbackFactory;
 import com.ly.oa.user.server.api.query.UserQuery;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,7 +87,7 @@ public interface RemoteUserService {
             value = "/user/{id}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"action=enable"}
+            params = {"action=forbidden"}
     )
     UserDTO forbiddenUser(@PathVariable Long id);
 
@@ -96,7 +95,7 @@ public interface RemoteUserService {
             value = "/user/{id}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"action=forbidden"}
+            params = {"action=enable"}
     )
     UserDTO enableUser(@PathVariable Long id);
 }

@@ -1,6 +1,5 @@
 package com.ly.oa.user.server.api.exception;
 
-import com.ly.oa.common.exception.ApiException;
 import com.ly.oa.common.exception.InternalApiException;
 import lombok.Getter;
 import lombok.Setter;

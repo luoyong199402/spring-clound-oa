@@ -1,6 +1,6 @@
 package com.ly.oa.user.server.dao;
 
-import com.ly.oa.user.server.constant.enums.SexEnum;
+import com.ly.oa.user.server.api.enums.SexEnum;
 import com.ly.oa.user.server.entity.dos.DeptDO;
 import com.ly.oa.user.server.entity.dos.UserDO;
 import lombok.extern.slf4j.Slf4j;

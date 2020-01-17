@@ -8,7 +8,7 @@ import com.ly.oa.user.server.api.query.UserQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/user")
 @Slf4j
-public class UserController  {
+public class UserController {
 
     @Autowired
     private RemoteUserService remoteUserService;
@@ -32,12 +32,8 @@ public class UserController  {
         return userDTO;
     }
 
-    @RequestMapping(
-            value = "/page",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    Page<UserDTO> queryUser(UserQuery userQuery, Pageable pageable) {
+    @GetMapping("page2")
+    Page<UserDTO> queryUser2(UserQuery userQuery, Pageable pageable) {
         List<String> sortList = pageable.getSort().stream()
                 .map(order -> {
                     return order.getProperty() + "," + order.getDirection().toString();
@@ -61,20 +57,41 @@ public class UserController  {
         return userDTOS;
     }
 
-    @RequestMapping(
-            value = "/page2",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    Page<UserDTO> queryUser2(UserQuery userQuery) {
+    @GetMapping("/page")
+    Page<UserDTO> queryUser(UserQuery userQuery) {
         Page<UserDTO> userDTOS = remoteUserService.queryUser(userQuery);
         log.info("{}", userDTOS);
         return userDTOS;
     }
 
     @PostMapping
-    public UserDTO saveUser(@RequestBody UserDTO userDTO) {
+    public UserDTO saveUser(@Validated({UserDTO.Save.class}) @RequestBody UserDTO userDTO) {
         userDTO = remoteUserService.saveUser(userDTO);
         return userDTO;
+    }
+
+    @GetMapping(params = {"loginName"})
+    public UserDTO getUserByLoginName(String loginName) {
+        return remoteUserService.getUserByLoginName(loginName);
+    }
+
+    @PutMapping("/{id}")
+    public UserDTO updateUser(@PathVariable long id, @RequestBody UserDTO userDTO) {
+        return remoteUserService.updateUser(id, userDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public UserDTO deleteUser(@PathVariable Long id) {
+        return remoteUserService.deleteUser(id);
+    }
+
+    @PutMapping(value = "/{id}", params = {"action=forbidden"})
+    public UserDTO forbiddenUser(@PathVariable Long id) {
+        return remoteUserService.forbiddenUser(id);
+    }
+
+    @PutMapping(value = "/{id}", params = {"action=enable"})
+    public UserDTO enableUser(@PathVariable Long id) {
+        return remoteUserService.enableUser(id);
     }
 }
