@@ -4,6 +4,7 @@ import com.ly.oa.common.page.Page;
 import com.ly.oa.common.orika.OrikaBeanMapper;
 import com.ly.oa.common.page.PageConvertMapper;
 import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.exception.UserAlreadyExistException;
 import com.ly.oa.user.server.api.exception.UserNotFoundException;
 import com.ly.oa.user.server.api.query.UserQuery;
 import com.ly.oa.user.server.dao.UserDao;
@@ -136,6 +137,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@CachePut(key = "#result.id")
 	public UserDTO saveUser(UserDTO userDTO) {
+		Optional<UserDO> optionalUser = userDao.getByLoginName(userDTO.getLoginName());
+		if (optionalUser.get() != null) {
+			throw new UserAlreadyExistException(optionalUser.get().getLoginName());
+		}
+
 		UserDO userDO = orikaBeanMapper.map(userDTO, UserDO.class);
 		userDO.setPassword(passwordEncoder.encode(userDO.getPassword()));
 		userDO.setId(null);
@@ -147,6 +153,7 @@ public class UserServiceImpl implements UserService {
 	@CachePut(key = "#userDTO.id")
 	public UserDTO updateUser(UserDTO userDTO) {
 		Optional<UserDO> userDOOptional = userDao.findById(userDTO.getId());
+		userDOOptional.orElseThrow(() -> new UserNotFoundException(null, "用户没有找到！", userDTO.getId()));
 		UserDO updateUserDO = orikaBeanMapper.map(userDTO, UserDO.class);
 
 		updateUserDO.setPassword(userDOOptional.get().getPassword());

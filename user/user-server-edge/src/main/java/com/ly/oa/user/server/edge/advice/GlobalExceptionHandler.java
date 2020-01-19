@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ly
@@ -94,22 +99,23 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
-	 * 内部微服务异常统一处理方法
+	 * 全局未知异常统一处理
 	 */
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
 	@ResponseBody
-	public APIResponse processMicroServiceException(HttpServletResponse response,
+	public APIResponse processException(HttpServletResponse response,
 													Exception e) {
 		response.setContentType("application/json;charset=UTF-8");
 		APIResponse result = new APIResponse();
 		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		result.setMessage(e.getMessage());
+		log.error("未处理异常： {}", e);
 		return result;
 	}
 
 	/**
-	 * 内部微服务异常统一处理方法
+	 * 参数校验失败异常处理
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
@@ -118,8 +124,16 @@ public class GlobalExceptionHandler {
 				  MethodArgumentNotValidException e) {
 		response.setContentType("application/json;charset=UTF-8");
 		APIResponse result = new APIResponse();
+
 		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		result.setMessage("参数校验错误： " + e.getMessage());
+
+		BindingResult bindingResult = e.getBindingResult();
+		List<ObjectError> allErrors = bindingResult.getAllErrors();
+		List<String> listErrorInfo = allErrors.stream()
+				.map(objectError -> objectError.getDefaultMessage())
+				.collect(Collectors.toList());
+		result.setMessage("参数校验错误： " + listErrorInfo.toString());
+
 		return result;
 	}
 

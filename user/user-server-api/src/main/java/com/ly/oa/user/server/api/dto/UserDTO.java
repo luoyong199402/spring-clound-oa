@@ -62,13 +62,13 @@ public class UserDTO {
     /**
      * 性别。 可以参考 SexEnum
      */
-    @EnumValue(value = SexEnum.class, message = "性别输入不合法，为无效值！")
+    @EnumValue(value = SexEnum.class, message = "性别输入不合法，为无效值！", groups = {Save.class, Update.class})
     private String sex;
 
     /**
      * 邮箱
      */
-    @Email(message = "邮箱格式不正确")
+    @Email(message = "邮箱格式不正确", groups = {Save.class, Update.class})
     private String email;
 
     /**

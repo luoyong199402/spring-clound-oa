@@ -38,7 +38,6 @@ public class RemoteUserServiceFallbackImpl implements RemoteUserService {
 		return null;
 	}
 
-
 	@Override
 	public UserDTO saveUser(UserDTO userDTO) {
 		log.warn("保存用户失败! {}", userDTO);
