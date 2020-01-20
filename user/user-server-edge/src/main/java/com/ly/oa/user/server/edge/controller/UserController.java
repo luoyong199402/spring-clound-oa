@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    Page<UserDTO> queryUser(UserQuery userQuery) {
+    Page<UserDTO> queryUser(@Validated UserQuery userQuery) {
         Page<UserDTO> userDTOS = remoteUserService.queryUser(userQuery);
         log.info("{}", userDTOS);
         return userDTOS;

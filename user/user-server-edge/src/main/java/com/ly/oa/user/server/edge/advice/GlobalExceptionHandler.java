@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -122,6 +123,29 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	public APIResponse processMethodArgumentNotValidException(HttpServletResponse response,
 				  MethodArgumentNotValidException e) {
+		response.setContentType("application/json;charset=UTF-8");
+		APIResponse result = new APIResponse();
+
+		result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+		BindingResult bindingResult = e.getBindingResult();
+		List<ObjectError> allErrors = bindingResult.getAllErrors();
+		List<String> listErrorInfo = allErrors.stream()
+				.map(objectError -> objectError.getDefaultMessage())
+				.collect(Collectors.toList());
+		result.setMessage("参数校验错误： " + listErrorInfo.toString());
+
+		return result;
+	}
+
+	/**
+	 * 参数校验失败异常处理
+	 */
+	@ExceptionHandler(BindException.class)
+	@ResponseStatus(HttpStatus. INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public APIResponse processBindException(HttpServletResponse response,
+							   BindException e) {
 		response.setContentType("application/json;charset=UTF-8");
 		APIResponse result = new APIResponse();
 

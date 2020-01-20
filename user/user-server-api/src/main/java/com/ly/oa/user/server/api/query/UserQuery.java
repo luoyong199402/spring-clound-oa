@@ -1,8 +1,13 @@
 package com.ly.oa.user.server.api.query;
 
+import com.ly.oa.user.server.api.dto.UserDTO;
+import com.ly.oa.user.server.api.enums.SexEnum;
+import com.ly.oa.user.server.api.validator.EnumValue;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.List;
 
@@ -19,16 +24,19 @@ public class UserQuery {
 	/**
 	 * 姓
 	 */
+	@Length(max = 32, message = "登录名不能超过32位")
 	private String firstName;
 
 	/**
 	 * 名
 	 */
+	@Length(max = 32, message = "登录名不能超过32位")
 	private String lastName;
 
 	/**
 	 * 登录名
 	 */
+	@Length(max = 32, message = "登录名不能超过32位")
 	private String loginName;
 
 	/**
@@ -39,11 +47,13 @@ public class UserQuery {
 	/**
 	 * 性别。 可以参考 SexEnum
 	 */
+	@EnumValue(value = SexEnum.class, message = "性别输入不合法，为无效值！")
 	private String sex;
 
 	/**
 	 * 邮箱
 	 */
+	@Email(message = "邮箱格式不正确")
 	private String email;
 
 	/**

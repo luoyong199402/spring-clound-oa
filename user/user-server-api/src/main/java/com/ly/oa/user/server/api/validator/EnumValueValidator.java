@@ -31,6 +31,12 @@ public class EnumValueValidator implements ConstraintValidator<EnumValue, String
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		Method declareMethod;
+
+		// 空值不做校验
+		if (StringUtils.isEmpty(value)) {
+			return true;
+		}
+
 		try {
 			declareMethod = enumValueClass.getDeclaredMethod(METHOD_NAME, String.class);
 		} catch (NoSuchMethodException e) {
