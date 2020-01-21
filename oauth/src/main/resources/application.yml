@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: service-auth
+server:
+  port: 8080
+
+info:
+  app.name: oa-oauth-server
+  company.name: com.ly
