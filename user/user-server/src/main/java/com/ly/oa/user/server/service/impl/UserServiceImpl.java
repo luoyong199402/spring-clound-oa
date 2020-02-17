@@ -138,7 +138,8 @@ public class UserServiceImpl implements UserService {
 	@CachePut(key = "#result.id")
 	public UserDTO saveUser(UserDTO userDTO) {
 		Optional<UserDO> optionalUser = userDao.getByLoginName(userDTO.getLoginName());
-		if (optionalUser.get() != null) {
+
+		if (!Optional.empty().equals(optionalUser)) {
 			throw new UserAlreadyExistException(optionalUser.get().getLoginName());
 		}
 

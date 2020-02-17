@@ -1,18 +1,27 @@
 package com.ly.oa.oauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -22,28 +31,35 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserDetailsService userDetailsService;
+	private RedisConnectionFactory connectionFactory;
 
-	// 使用最基本的InMemoryTokenStore生成token
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private DataSource dataSource;
+
+	// 使用redis 来存储token信息
 	@Bean
-	public TokenStore memoryTokenStore() {
-		return new InMemoryTokenStore();
+	public TokenStore tokenStore() {
+		return new RedisTokenStore(connectionFactory);
+	}
+
+	// 使用jdbc来存储客户端信息
+	@Bean
+	public JdbcClientDetailsService jdbcClientDetailsService() {
+		return new JdbcClientDetailsService(dataSource);
 	}
 
 	/**
 	 * 配置客户端详情服务
-	 * 客户端详细信息在这里进行初始化，你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息
+	 * 客户端详细信息在这里进行初始化，你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息  秘钥
 	 * @param clients
 	 * @throws Exception
 	 */
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory()
-				.withClient("client1")//用于标识用户ID
-				.authorizedGrantTypes("authorization_code", "password", "refresh_token")//授权方式
-				.scopes("test")//授权范围
-				.redirectUris("http://baidu.com")
-				.secret(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456"));//客户端安全码,secret密码配置从 Spring Security 5.0开始必须以 {bcrypt}+加密后的密码 这种格式填写;
+		clients.withClientDetails(jdbcClientDetailsService());
 	}
 
 	/**
@@ -53,8 +69,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	 */
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		/* 配置token获取合验证时的策略 */
-		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").allowFormAuthenticationForClients();
+		security
+				.tokenKeyAccess("permitAll()")
+				.checkTokenAccess("isAuthenticated()")
+				.passwordEncoder(passwordEncoder)
+				.allowFormAuthenticationForClients();
 	}
 
 	/**
@@ -65,6 +84,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		// 配置tokenStore,需要配置userDetailsService，否则refresh_token会报错
-		endpoints.authenticationManager(authenticationManager).tokenStore(memoryTokenStore()).userDetailsService(userDetailsService);
+		endpoints
+				.authenticationManager(authenticationManager)
+				.tokenStore(tokenStore());
 	}
 }

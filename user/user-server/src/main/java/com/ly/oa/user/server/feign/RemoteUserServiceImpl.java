@@ -41,8 +41,8 @@ public class RemoteUserServiceImpl {
         return userService.saveUser(userDTO);
     }
 
-    @GetMapping(params = {"loginName"})
-    public UserDTO getUserByLoginName(String loginName) {
+    @GetMapping("/login-name/{loginName}")
+    public UserDTO getUserByLoginName(@PathVariable String loginName) {
         return userService.getUserByLoginName(loginName);
     }
 

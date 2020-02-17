@@ -46,10 +46,10 @@ class UserServiceImplTest {
 	private UserDTO getUserDTO() {
 		return UserDTO.builder()
 				.id(1L)
-				.firstName("luo")
-				.lastName("yong")
-				.loginName("luoyong")
-				.password("123")
+				.firstName("管理员")
+				.lastName("")
+				.loginName("admin")
+				.password("123456")
 				.isEnable(true)
 				.sex(SexEnum.MAIL.getValue())
 				.email("1@1.com").build();

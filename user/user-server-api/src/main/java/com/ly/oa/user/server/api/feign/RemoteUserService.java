@@ -62,12 +62,11 @@ public interface RemoteUserService {
     UserDTO saveUser(@RequestBody UserDTO userDTO);
 
     @RequestMapping(
-            value = "/user",
+            value = "/user/login-name/{loginName}",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = {"loginName"}
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
-    UserDTO getUserByLoginName(String loginName);
+    UserDTO getUserByLoginName(@PathVariable String loginName);
 
     @RequestMapping(
             value = "/user/{id}",

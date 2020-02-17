@@ -167,10 +167,10 @@ class lTest {
 				.email("1@1.com")
 				.sex(SexEnum.MAIL.getValue())
 				.isEnable(true)
-				.loginName("haha")
+				.loginName("admin")
 				.firstName("1")
 				.lastName("1")
-				.password("123")
+				.password("123456")
 				.build();
 	}
 }

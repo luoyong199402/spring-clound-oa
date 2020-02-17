@@ -12,6 +12,7 @@
         <module>user</module>
         <module>eurake</module>
         <module>common</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
