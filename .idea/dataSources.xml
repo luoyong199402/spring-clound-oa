@@ -8,5 +8,12 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://180.76.248.216:3306/oa-user</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="180.76.248.216" uuid="9a9faaa6-a7d9-4c6b-8fb2-25790aebceaf">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>云数据库</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://180.76.248.216:3306</jdbc-url>
+    </data-source>
   </component>
 </project>

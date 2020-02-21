@@ -6,19 +6,28 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="user-server" />
         <module name="common" />
         <module name="eurake" />
-        <module name="api-gateway" />
+        <module name="authority-server-api" />
+        <module name="authority-server" />
         <module name="oauth" />
         <module name="user-server-edge" />
-        <module name="user-server" />
+        <module name="api-gateway" />
         <module name="user-server-api" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="authority-api" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="authority" options="-parameters" />
+      <module name="authority-api" options="-parameters" />
+      <module name="authority-server" options="-parameters" />
+      <module name="authority-server-api" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="eurake" options="-parameters" />
       <module name="oauth" options="-parameters" />

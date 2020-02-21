@@ -13,6 +13,8 @@
         <module>eurake</module>
         <module>common</module>
         <module>api-gateway</module>
+        <module>authority</module>
+        <module>oauth</module>
     </modules>
 
     <properties>
